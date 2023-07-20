@@ -22,10 +22,8 @@ function PushNotificationLayout({ children }) {
     async function setToken() {
       try {
         const token = await firebaseCloudMessaging.init();
-        alert(token);
         if (token) {
           setTokenValue(token);
-          console.log("token", token);
           getMessage();
         }
       } catch (error) {
