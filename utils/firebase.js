@@ -27,8 +27,22 @@ const firebaseCloudMessaging = {
 
         // Request the push notification permission from browser
         const status = await Notification.requestPermission();
-        alert(status);
+
         if (status && status === "granted") {
+          try {
+            Notification.requestPermission().then(() => {
+              Notification.requestPermission();
+            });
+          } catch (error) {
+            // Safari doesn't return a promise for requestPermissions and it
+            // throws a TypeError. It takes a callback as the first argument
+            // instead.
+            if (error instanceof TypeError) {
+              Notification.requestPermission(() => {});
+            } else {
+              throw error;
+            }
+          }
           // Get new token from Firebase
           const fcm_token = await messaging.getToken({
             vapidKey:
