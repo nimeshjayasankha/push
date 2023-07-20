@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as firebase from "firebase/app";
 import "firebase/messaging";
 import { firebaseCloudMessaging } from "../utils/firebase";
@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 
 function PushNotificationLayout({ children }) {
   const router = useRouter();
+  const [tokenValue, setTokenValue] = useState("");
   useEffect(() => {
     setToken();
 
@@ -23,7 +24,7 @@ function PushNotificationLayout({ children }) {
         const token = await firebaseCloudMessaging.init();
         alert(token);
         if (token) {
-          alert("111111111111");
+          setTokenValue(token);
           console.log("token", token);
           getMessage();
         }
@@ -57,6 +58,7 @@ function PushNotificationLayout({ children }) {
   return (
     <>
       <ToastContainer />
+      <textarea value={tokenValue} rows="20" cols="520" />
       {children}
     </>
   );
